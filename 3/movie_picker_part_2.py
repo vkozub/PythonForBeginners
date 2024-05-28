@@ -1,3 +1,5 @@
+"""Module Using conditions"""
+
 GENRES = {
     'comedy': ['Meet the Parents', 'Anger Management'],
     'adventures': ['Mummy'],
