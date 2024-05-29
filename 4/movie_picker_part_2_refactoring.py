@@ -18,6 +18,11 @@ CAST = {
     'Mission Impossible': ['Tom Cruise', 'Jeremy Renner']
 }
 
+PG = {
+    13: {'Meet the Parents', 'Anger Management', 'Mummy', 'Meet Joe Black', 'Mission Impossible'},
+    16: {'Vanilla Sky'}
+}
+
 # ----------------------------------------------------------------
 
 def search(source, source_name='genre'):
@@ -45,7 +50,24 @@ def find_movies_by_actor(actor_name, cast):
     print(f'Available Movies: {movies} with {actor_name}\n')
     return movies
 
+def is_integer(string):
+    """Verify if string is an integer"""
+
+    try:
+        integer = int(string)
+        return isinstance(integer, int)
+    except ValueError:
+        return False
+
+
 # ----------------------------------------------------------------
+
+# Input of user`s age and verify it is valid integer value
+pg_input = input('Input your age in full years: ')
+intBool = is_integer(pg_input)
+while not intBool:
+    pg_input = input('Input your full years: ')
+    intBool = is_integer(pg_input)
 
 search_input = input('Search by Genre: ')
 
