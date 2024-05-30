@@ -59,10 +59,9 @@ def is_integer(string):
     except ValueError:
         return False
 
-def update_by_pg_rate(pg_rate):
-    """Update data GENRES and CAST based on PG rate"""
+def get_movies_based_on_pg_rate(pg_rate):
+    """Get movies based on pg_rate"""
 
-    # get movies based on pg rate
     get_pg_keys = list(PG.keys())
     allowed_keys = []
     for key in get_pg_keys:
@@ -71,6 +70,13 @@ def update_by_pg_rate(pg_rate):
     allowed_movies_based_on_pg_rate = []
     for key in allowed_keys:
         allowed_movies_based_on_pg_rate += PG[key]
+    return allowed_movies_based_on_pg_rate
+
+def update_by_pg_rate(pg_rate):
+    """Update data GENRES and CAST based on PG rate"""
+
+    # get movies based on pg rate
+    allowed_movies_based_on_pg_rate = get_movies_based_on_pg_rate(pg_rate)
     # update cast table
     new_cast = CAST.copy()
     for movie in CAST:
@@ -96,34 +102,37 @@ while not intBool:
     pg_input = input('Input your full years: ')
     intBool = is_integer(pg_input)
 
-search_input = input('Search by Genre: ')
+if len(get_movies_based_on_pg_rate(int(pg_input))) > 0:
+    search_input = input('Search by Genre: ')
 
-if search_input == 'y':
-
-    # Find genre
-    updated_data = update_by_pg_rate(int(pg_input))
-    genre = search(list(updated_data['genres'].keys()))
-    # Find movie by genre
-    movie_by_genre = search(updated_data['genres'][genre], 'movie')
-
-    print(f'Movie to watch: {movie_by_genre}. Genre: {genre}.\n')
-elif search_input == 'n':
-    search_input = input('Search by Actor: ')
     if search_input == 'y':
-        # Get available actors
+
+        # Find genre
         updated_data = update_by_pg_rate(int(pg_input))
-        available_actors = get_available_values(updated_data['cast'])
+        genre = search(list(updated_data['genres'].keys()))
+        # Find movie by genre
+        movie_by_genre = search(updated_data['genres'][genre], 'movie')
 
-        # Find actor
-        actor = search(available_actors, 'actor')
+        print(f'Movie to watch: {movie_by_genre}. Genre: {genre}.\n')
+    elif search_input == 'n':
+        search_input = input('Search by Actor: ')
+        if search_input == 'y':
+            # Get available actors
+            updated_data = update_by_pg_rate(int(pg_input))
+            available_actors = get_available_values(updated_data['cast'])
 
-        # find films with actor
-        available_movies_with_actor = find_movies_by_actor(actor, updated_data['cast'])
+            # Find actor
+            actor = search(available_actors, 'actor')
 
-        # Find movie by actor
-        movie_by_actor = search(available_movies_with_actor, 'movie')
-        print(f'Movie to watch: {movie_by_actor}. Starring: {actor}.\n')
+            # find films with actor
+            available_movies_with_actor = find_movies_by_actor(actor, updated_data['cast'])
+
+            # Find movie by actor
+            movie_by_actor = search(available_movies_with_actor, 'movie')
+            print(f'Movie to watch: {movie_by_actor}. Starring: {actor}.\n')
+        else:
+            print('There is no searching. Choose searching by Genre or Actor.')
     else:
-        print('There is no searching. Choose searching by Genre or Actor.')
+        print('Invalid search parameter. Try "y" or "n".')
 else:
-    print('Invalid search parameter. Try "y" or "n".')
+    print('There are no available movies based on your age')
