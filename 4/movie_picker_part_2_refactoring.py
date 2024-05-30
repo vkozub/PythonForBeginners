@@ -23,7 +23,7 @@ PG = {
     16: {'Vanilla Sky'}
 }
 
-# ----------------------------------------------------------------
+# ----------------------------------------------------------------Methods---------------------------------------------
 
 def search(source, source_name='genre'):
     """Function to search by source"""
@@ -59,8 +59,35 @@ def is_integer(string):
     except ValueError:
         return False
 
+def update_by_pg_rate(pg_rate):
+    """Update data GENRES and CAST based on PG rate"""
 
-# ----------------------------------------------------------------
+    # get movies based on pg rate
+    get_pg_keys = list(PG.keys())
+    allowed_keys = []
+    for key in get_pg_keys:
+        if key <= pg_rate:
+            allowed_keys.append(key)
+    allowed_movies_based_on_pg_rate = []
+    for key in allowed_keys:
+        allowed_movies_based_on_pg_rate += PG[key]
+    # update cast table
+    new_cast = CAST.copy()
+    for movie in CAST:
+        if not movie in allowed_movies_based_on_pg_rate:
+            new_cast.pop(movie)
+    # update genres table
+    new_genres = {}
+    for genre_old, films in GENRES.items():
+        movies = []
+        for movie in films:
+            if movie in allowed_movies_based_on_pg_rate:
+                movies.append(movie)
+        if len(movies) > 0:
+            new_genres[genre_old] = movies
+    return dict(cast=new_cast, genres=new_genres)
+
+# ----------------------------------------------------------------Main Programm----------------------------------------------------------------
 
 # Input of user`s age and verify it is valid integer value
 pg_input = input('Input your age in full years: ')
@@ -72,23 +99,26 @@ while not intBool:
 search_input = input('Search by Genre: ')
 
 if search_input == 'y':
+
     # Find genre
-    genre = search(list(GENRES.keys()))
+    updated_data = update_by_pg_rate(int(pg_input))
+    genre = search(list(updated_data['genres'].keys()))
     # Find movie by genre
-    movie_by_genre = search(GENRES[genre], 'movie')
+    movie_by_genre = search(updated_data['genres'][genre], 'movie')
 
     print(f'Movie to watch: {movie_by_genre}. Genre: {genre}.\n')
 elif search_input == 'n':
     search_input = input('Search by Actor: ')
     if search_input == 'y':
         # Get available actors
-        available_actors = get_available_values(CAST)
+        updated_data = update_by_pg_rate(int(pg_input))
+        available_actors = get_available_values(updated_data['cast'])
 
         # Find actor
         actor = search(available_actors, 'actor')
 
         # find films with actor
-        available_movies_with_actor = find_movies_by_actor(actor, CAST)
+        available_movies_with_actor = find_movies_by_actor(actor, updated_data['cast'])
 
         # Find movie by actor
         movie_by_actor = search(available_movies_with_actor, 'movie')
