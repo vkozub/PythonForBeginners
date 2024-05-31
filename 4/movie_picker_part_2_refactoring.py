@@ -54,23 +54,19 @@ def is_integer(string):
     """Verify if string is an integer"""
 
     try:
-        integer = int(string)
-        return isinstance(integer, int)
+        int(string)
+        return True
     except ValueError:
         return False
 
-def get_movies_based_on_pg_rate(pg_rate):
+def get_movies_based_on_pg_rate(pg_rate: int):
     """Get movies based on pg_rate"""
 
-    get_pg_keys = list(PG.keys())
-    allowed_keys = []
-    for key in get_pg_keys:
-        if key <= pg_rate:
-            allowed_keys.append(key)
-    allowed_movies_based_on_pg_rate = []
-    for key in allowed_keys:
-        allowed_movies_based_on_pg_rate += PG[key]
-    return allowed_movies_based_on_pg_rate
+    movies = []
+    for age, films in PG.items():
+        if age <= pg_rate:
+            movies += films
+    return movies
 
 def update_by_pg_rate(pg_rate):
     """Update data GENRES and CAST based on PG rate"""
@@ -97,12 +93,12 @@ def update_by_pg_rate(pg_rate):
 
 # Input of user`s age and verify it is valid integer value
 pg_input = input('Input your age in full years: ')
-intBool = is_integer(pg_input)
-while not intBool:
+int_bool = is_integer(pg_input)
+while not int_bool:
     pg_input = input('Input your full years: ')
-    intBool = is_integer(pg_input)
+    int_bool = is_integer(pg_input)
 
-if len(get_movies_based_on_pg_rate(int(pg_input))) > 0:
+if get_movies_based_on_pg_rate(int(pg_input)):
     search_input = input('Search by Genre: ')
 
     if search_input == 'y':
