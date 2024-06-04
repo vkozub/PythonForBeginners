@@ -10,7 +10,7 @@ class ContactList:
 
     def __str__(self) -> str:
         array = []
-        for contact in self:
+        for contact in self.sorted_by_age():
             array.append(contact.__str__())
         array.append(f'Amount of contacts: {len(self)}')
         return '\n'.join(array)
@@ -29,3 +29,12 @@ class ContactList:
         if not isinstance(contact, Contact):
             raise ValueError('Invalid contact!')
         self.storage.append(contact)
+
+    def sorted_by_age(self):
+        """Return sorted contact list by age"""
+        return sorted(self.storage, key=self.age_difference)
+
+    @staticmethod
+    def age_difference(contact):
+        """Sorting by age parameter"""
+        return abs(int(contact.age) - 0)
