@@ -1,5 +1,9 @@
 """Board class"""
 
+import random
+from apple import Apple
+from snake import Snake
+
 class Board:
     """Base class for board"""
     def __init__(self, width:int, height:int, border='*'):
@@ -23,6 +27,8 @@ class Board:
                     non_limits.add((column, row))
         self._limits = limits
         self._non_limits = non_limits
+        self._apple = Apple({random.choice(list(self._non_limits))})
+        self._snake = Snake({random.choice(list(self.free_coord))})
         return non_limits.union(limits)
 
     @property
@@ -39,11 +45,31 @@ class Board:
     def non_limits_coord(self):
         """Get non limits coordinates"""
         return self._non_limits
+    
+    @property
+    def free_coord(self):
+        """Get not ocupied (free) coordinates"""
+        free_coord = set()
+        if hasattr(self, '_snake'):
+            free_coord = self._non_limits.difference(self._apple.position, self._snake.position)
+        else:
+            free_coord = self._non_limits.difference(self._apple.position)
+        return free_coord
+    
+    @property
+    def apple_position(self):
+        """Get apple coordinates"""
+        return self._apple.position
+    
+    @property
+    def snake_position(self):
+        """Get apple coordinates"""
+        return self._snake.position
 
     def show(self):
         """Show board"""
         sorted_coordinates = sorted(self._board)
-        print(sorted_coordinates)
+        # print(sorted_coordinates)
         for field in sorted_coordinates:
             if self._width - 1 == field[1]:
                 print(self._boarder)
@@ -51,5 +77,9 @@ class Board:
                 print(self._boarder, end = '')
             elif self._height - 1 == field[0]:
                 print(self._boarder, end = '')
+            elif field in self.apple_position:
+                print(self._apple.body, end = '')
+            elif field in self.snake_position:
+                print(self._snake.body, end = '')
             else:
                 print(' ', end = '')

@@ -1,3 +1,5 @@
+"""Game module"""
+
 # class Game:
 #     def __init__(self):
 #         # self.board = Board(width=4, height=4)

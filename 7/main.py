@@ -2,6 +2,6 @@
 
 from board import Board
 
-board = Board(25, 15)
+board = Board(10, 10)
 
 print(board.show())
