@@ -2,9 +2,6 @@
 
 from board import Board
 
-board = Board(5, 5)
+board = Board(25, 15)
 
-print(board.all_coordinates)
-print(board.limits_coord)
-print(board.non_limits_coord)
 print(board.show())

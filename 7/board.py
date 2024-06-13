@@ -15,9 +15,9 @@ class Board:
 
         for column in range(self._height):
             for row in range(self._width):
-                if column in (0, (self._height - 1)):
+                if column in (0, (self._width - 1)):
                     limits.add((column, row))
-                elif row in (0, (self._width - 1)):
+                elif row in (0, (self._height - 1)):
                     limits.add((column, row))
                 else:
                     non_limits.add((column, row))
@@ -43,5 +43,13 @@ class Board:
     def show(self):
         """Show board"""
         sorted_coordinates = sorted(self._board)
+        print(sorted_coordinates)
         for field in sorted_coordinates:
-            print(field)
+            if self._width - 1 == field[1]:
+                print(self._boarder)
+            elif 0 in field:
+                print(self._boarder, end = '')
+            elif self._height - 1 == field[0]:
+                print(self._boarder, end = '')
+            else:
+                print(' ', end = '')
