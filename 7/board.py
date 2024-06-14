@@ -51,20 +51,20 @@ class Board:
         """Get not ocupied (free) coordinates"""
         free_coord = set()
         if hasattr(self, '_snake'):
-            free_coord = self._non_limits.difference(self._apple.position, self._snake.position)
+            free_coord = self._non_limits.difference(self.apple.position, self.snake.position)
         else:
-            free_coord = self._non_limits.difference(self._apple.position)
+            free_coord = self._non_limits.difference(self.apple.position)
         return free_coord
     
     @property
-    def apple_position(self):
+    def apple(self):
         """Get apple coordinates"""
-        return self._apple.position
+        return self._apple
     
     @property
-    def snake_position(self):
+    def snake(self):
         """Get apple coordinates"""
-        return self._snake.position
+        return self._snake
 
     def show(self):
         """Show board"""
@@ -77,9 +77,9 @@ class Board:
                 print(self._boarder, end = '')
             elif self._height - 1 == field[0]:
                 print(self._boarder, end = '')
-            elif field in self.apple_position:
+            elif field in self.apple.position:
                 print(self._apple.body, end = '')
-            elif field in self.snake_position:
+            elif field in self.snake.position:
                 print(self._snake.body, end = '')
             else:
                 print(' ', end = '')
