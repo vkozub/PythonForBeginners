@@ -14,6 +14,7 @@ class Board:
 
     def init_board(self):
         """Initialize board state"""
+
         limits = set()
         non_limits = set()
 
@@ -45,7 +46,7 @@ class Board:
     def non_limits_coord(self):
         """Get non limits coordinates"""
         return self._non_limits
-    
+
     @property
     def free_coord(self):
         """Get not ocupied (free) coordinates"""
@@ -55,12 +56,12 @@ class Board:
         else:
             free_coord = self._non_limits.difference(self.apple.position)
         return free_coord
-    
+
     @property
     def apple(self):
         """Get apple coordinates"""
         return self._apple
-    
+
     @property
     def snake(self):
         """Get apple coordinates"""

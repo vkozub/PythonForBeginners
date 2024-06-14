@@ -1,7 +1,24 @@
 """Snake Game"""
 
-from board import Board
+from time import sleep
+from game import Game
 
-board = Board(10, 10)
+game = Game(15, 15)
 
-print(board.show())
+while True:
+    try:
+        game.render()
+        sleep(1)
+    except RuntimeError as e:
+        print(e)
+        break
+
+# game.render()
+# sleep(2)
+# game.render()
+# sleep(2)
+# game.render()
+# sleep(2)
+# game.render()
+# sleep(2)
+print('GAME OVER!')

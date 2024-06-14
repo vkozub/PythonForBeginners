@@ -1,6 +1,7 @@
 """Game module"""
 
 import math
+import random
 from board import Board
 
 class Game:
@@ -8,17 +9,22 @@ class Game:
 
     def __init__(self, width, height):
         self.board = Board(width, height)
-        # self.snake = Snake()
+        self.init_game()
+
+    def init_game(self):
+        """Initialize game state"""
+
+        self.board.show()
 
     def all_choices(self):
         """Returns a list of all choices for the snake"""
 
         position = list(self.board.snake.position)
         choices = [
-            (position[0] + 1, position[1]),
-            (position[0] - 1, position[1]),
-            (position[0], position[1] + 1),
-            (position[0], position[1] - 1)
+            (position[0][0] + 1, position[0][1]),
+            (position[0][0] - 1, position[0][1]),
+            (position[0][0], position[0][1] + 1),
+            (position[0][0], position[0][1] - 1)
         ]
         return choices
 
@@ -50,5 +56,26 @@ class Game:
         for field in choices:
             distance = math.sqrt(pow((apple_position[0][0] - field[0]), 2) + pow((apple_position[0][1] - field[1]), 2))
             if distance < min_distance:
+                min_distance = distance
                 min_choice = field
         return [min_choice]
+
+    def move(self, coordinates):
+        """Move the snake"""
+
+        snake_coordinates = list(self.board.snake.position)
+        if coordinates[0] in list(self.board.apple.position):
+            snake_coordinates.append(list(self.board.apple.position)[0])
+            self.board.snake.position = set(snake_coordinates)
+            self.board.apple.position = {random.choice(list(self.board.free_coord))}
+        else:
+            snake_coordinates.pop()
+            snake_coordinates.append(coordinates[0])
+        self.board.snake.position = set(snake_coordinates)
+
+    def render(self):
+        """Render the game cycle"""
+
+        coordinates = self.choices()
+        self.move(coordinates)
+        self.board.show()
