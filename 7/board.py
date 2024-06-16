@@ -85,4 +85,7 @@ class Board:
                 print(' ', end = '')
 
     def __str__(self) -> str:
-        return f'Non limits fields: {self._non_limits}\n' + f'Limits fields: {self._limits}\n' + f'Apple position: {self.apple.position}\n' + f'Snake position: {self.snake.position}'
+        return f'Non limits fields: {self._non_limits}\n' \
+                f'Limits fields: {self._limits}\n' \
+                f'Apple position: {self.apple.position}\n' \
+                f'Snake position: {self.snake.position}'
