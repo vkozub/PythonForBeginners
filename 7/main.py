@@ -4,6 +4,7 @@ from time import sleep
 from game import Game
 
 game = Game(7, 7)
+print(game.board)
 
 while True:
     try:
