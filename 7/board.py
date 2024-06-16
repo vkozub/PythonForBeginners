@@ -70,7 +70,6 @@ class Board:
     def show(self):
         """Show board"""
         sorted_coordinates = sorted(self._board)
-        # print(sorted_coordinates)
         for field in sorted_coordinates:
             if self._width - 1 == field[1]:
                 print(self._boarder)
