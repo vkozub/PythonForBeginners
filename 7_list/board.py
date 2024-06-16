@@ -15,22 +15,22 @@ class Board:
     def init_board(self):
         """Initialize board state"""
 
-        limits = set()
-        non_limits = set()
+        limits = []
+        non_limits = []
 
         for column in range(self._height):
             for row in range(self._width):
                 if column in (0, (self._width - 1)):
-                    limits.add((column, row))
+                    limits.append((column, row))
                 elif row in (0, (self._height - 1)):
-                    limits.add((column, row))
+                    limits.append((column, row))
                 else:
-                    non_limits.add((column, row))
+                    non_limits.append((column, row))
         self._limits = limits
         self._non_limits = non_limits
-        self._apple = Apple({random.choice(list(self._non_limits))})
-        self._snake = Snake({random.choice(list(self.free_coord))})
-        return non_limits.union(limits)
+        self._apple = Apple([random.choice(non_limits)])
+        self._snake = Snake([random.choice(self.free_coord)])
+        return list(set(non_limits) | set(limits))
 
     @property
     def all_coordinates(self):
@@ -52,9 +52,9 @@ class Board:
         """Get not ocupied (free) coordinates"""
         free_coord = set()
         if hasattr(self, '_snake'):
-            free_coord = self._non_limits.difference(self.apple.position, self.snake.position)
+            free_coord = list(set(self._non_limits) - set(self.apple.position) - set(self.snake.position))
         else:
-            free_coord = self._non_limits.difference(self.apple.position)
+            free_coord = list(set(self._non_limits) - set(self.apple.position))
         return free_coord
 
     @property
@@ -64,7 +64,7 @@ class Board:
 
     @property
     def snake(self):
-        """Get apple coordinates"""
+        """Get snake coordinates"""
         return self._snake
 
     def show(self):

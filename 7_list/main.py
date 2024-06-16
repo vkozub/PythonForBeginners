@@ -3,7 +3,7 @@
 from time import sleep
 from game import Game
 
-game = Game(12, 12)
+game = Game(7, 7)
 
 while True:
     try:
