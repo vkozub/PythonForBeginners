@@ -31,7 +31,7 @@ class Snake:
 
     @property
     def tail(self):
-        """Get snake tail position"""
+        """Set snake tail position"""
         return self._tail
 
     @tail.setter
