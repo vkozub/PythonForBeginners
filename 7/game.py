@@ -16,10 +16,10 @@ class Game:
 
         self.board.show()
 
-    def all_choices(self):
-        """Returns a list of all choices for the snake"""
+    def all_head_choices(self):
+        """Returns a list of all choices for the snake head to move"""
 
-        position = list(self.board.snake.position)
+        position = list(self.board.snake.head)
         choices = [
             (position[0][0] + 1, position[0][1]),
             (position[0][0] - 1, position[0][1]),
@@ -28,13 +28,13 @@ class Game:
         ]
         return choices
 
-    def choices(self):
-        """Returns a list of possible choices for the snake"""
+    def head_choices(self):
+        """Returns a list of possible choices for the snake to move"""
 
         choices = []
         free_fields = list(self.board.free_coord)
         apple_position = list(self.board.apple.position)
-        for field in self.all_choices():
+        for field in self.all_head_choices():
             if field in apple_position:
                 choices = apple_position
                 break
@@ -60,22 +60,44 @@ class Game:
                 min_choice = field
         return [min_choice]
 
+    def next_tail(self):
+        """Returns the next tail of the sanke to set up"""
+
+        position = list(self.board.snake.tail)
+        free_fields = list(self.board.free_coord)
+        limits_fields = list(self.board.limits_coord)
+        choices = [
+            (position[0][0] + 1, position[0][1]),
+            (position[0][0] - 1, position[0][1]),
+            (position[0][0], position[0][1] + 1),
+            (position[0][0], position[0][1] - 1)
+        ]
+        next_tail = []
+        for field in choices:
+            if  field not in free_fields and field not in limits_fields:
+                next_tail.append(field)
+        return next_tail
+
     def move(self, coordinates):
         """Move the snake"""
 
         snake_coordinates = list(self.board.snake.position)
         if coordinates[0] in list(self.board.apple.position):
             snake_coordinates.append(list(self.board.apple.position)[0])
-            self.board.snake.position = set(snake_coordinates)
             self.board.apple.position = {random.choice(list(self.board.free_coord))}
         else:
-            snake_coordinates.pop()
+            snake_coordinates.remove(list(self.board.snake.tail)[0])
             snake_coordinates.append(coordinates[0])
+            if len(snake_coordinates) > 1:
+                self.board.snake.tail = set(self.next_tail())
+            else:
+                self.board.snake.tail = set(coordinates)
         self.board.snake.position = set(snake_coordinates)
+        self.board.snake.head = set(coordinates)
 
     def render(self):
         """Render the game cycle"""
 
-        coordinates = self.choices()
+        coordinates = self.head_choices()
         self.move(coordinates)
         self.board.show()

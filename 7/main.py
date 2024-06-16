@@ -3,7 +3,7 @@
 from time import sleep
 from game import Game
 
-game = Game(15, 15)
+game = Game(12, 12)
 
 while True:
     try:
@@ -13,12 +13,4 @@ while True:
         print(e)
         break
 
-# game.render()
-# sleep(2)
-# game.render()
-# sleep(2)
-# game.render()
-# sleep(2)
-# game.render()
-# sleep(2)
 print('GAME OVER!')
